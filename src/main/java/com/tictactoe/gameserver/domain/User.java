@@ -25,6 +25,14 @@ public class User implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
+    public User(Long userId, String email, String username, String passwordCode) {
+        this.userId = userId;
+        this.email = email;
+        this.username = username;
+        this.password = passwordCode;
+        this.enabled = true;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")

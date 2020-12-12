@@ -1,21 +1,12 @@
 package com.tictactoe.gameserver.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Data
 @Entity
@@ -29,11 +20,19 @@ public class Game {
     @Column(name = "game_id")
     protected Long gameId;
 
+    @Lob
     private String gameState;
 
-    protected Long userIdX;
+    @Column(name = "user_id")
+    private Long userId;
 
-    protected Long userIdO;
+    @ManyToOne
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User user;
+
+    private Long userIdPaired;
+
+    private boolean completed;
 
     @Version
     protected Long version;

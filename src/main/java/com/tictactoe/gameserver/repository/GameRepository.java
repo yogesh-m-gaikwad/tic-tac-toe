@@ -10,7 +10,8 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface GameRepository extends JpaRepository<Game, Long> {
-
     @Override
     Optional<Game> findById(Long gameId);
+
+    Optional<Game> findFirstByUserIdAndCompletedFalseOrderByUpdatedOnDesc(Long userId);
 }

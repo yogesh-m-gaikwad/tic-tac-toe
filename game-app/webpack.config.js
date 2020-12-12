@@ -11,9 +11,17 @@ module.exports = {
             {
                 test: /\.jsx?$/,
                 loader: 'babel-loader'
+            },
+            {
+                test: /\.css$/,
+                use: [
+                  'style-loader',
+                  'css-loader'
+                ]
             }
         ]
     },
+    devtool: 'inline-source-map',
     resolve: {
         extensions: ['.js', '.jsx'],
         alias: {
@@ -21,10 +29,11 @@ module.exports = {
         }
     },
     plugins: [new HtmlWebpackPlugin({
-        template: './src/index.html'
+        template: './src/index.html',
+        title: 'Development'
     })],
     devServer: {
-        historyApiFallback: true
+        historyApiFallback: true,
     },
     externals: {
         // global app config object

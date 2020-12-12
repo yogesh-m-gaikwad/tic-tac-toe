@@ -5,6 +5,7 @@ import { history } from '../_helpers';
 import { authenticationService } from '../_services';
 import { PrivateRoute } from '../_components';
 import { HomePage } from '../HomePage';
+import { GamePage } from '../GamePage';
 import { LoginPage } from '../LoginPage';
 
 class App extends React.Component {
@@ -38,11 +39,12 @@ class App extends React.Component {
                             </div>
                         </nav>
                     }
-                    <div className="jumbotron">
+                    <div className="jumbotron page">
                         <div className="container">
                             <div className="row">
                                 <div className="col-md-6 offset-md-3">
                                     <PrivateRoute exact path="/" component={HomePage} />
+                                    <PrivateRoute exact path="/game" component={GamePage} />
                                     <Route path="/signin" component={LoginPage} />
                                 </div>
                             </div>

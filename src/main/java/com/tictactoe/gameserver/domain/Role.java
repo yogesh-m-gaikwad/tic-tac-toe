@@ -18,6 +18,12 @@ public class Role {
 
     private static final long serialVersionUID = 1L;
 
+    public Role(Long roleId, String name, Long version) {
+        this.roleId = roleId;
+        this.name = name;
+        this.version = version;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
