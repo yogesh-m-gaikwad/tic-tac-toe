@@ -27,16 +27,16 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
-    protected Long roleId;
+    private Long roleId;
 
     @Version
-    protected Long version;
+    private Long version;
 
     @CreationTimestamp
-    protected LocalDateTime createdOn;
+    private LocalDateTime createdOn;
 
     @UpdateTimestamp
-    protected LocalDateTime updatedOn;
+    private LocalDateTime updatedOn;
 
     private String name;
 

@@ -32,6 +32,12 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * AuthServerConfiguration class for JWT auth server related configurations.
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 @Configuration
 @EnableAuthorizationServer
 public class AuthServerConfiguration extends AuthorizationServerConfigurerAdapter {

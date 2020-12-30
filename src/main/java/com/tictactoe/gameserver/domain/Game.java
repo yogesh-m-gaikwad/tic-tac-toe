@@ -18,7 +18,7 @@ public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "game_id")
-    protected Long gameId;
+    private Long gameId;
 
     @Lob
     private String gameState;
@@ -35,11 +35,11 @@ public class Game {
     private boolean completed;
 
     @Version
-    protected Long version;
+    private Long version;
 
     @CreationTimestamp
-    protected LocalDateTime createdOn;
+    private LocalDateTime createdOn;
 
     @UpdateTimestamp
-    protected LocalDateTime updatedOn;
+    private LocalDateTime updatedOn;
 }

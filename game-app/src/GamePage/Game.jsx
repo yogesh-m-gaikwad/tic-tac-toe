@@ -20,7 +20,7 @@ class Game extends React.Component {
             gameId: gameId,
             history: gameState.history,
             stepNumber: gameState.history ? gameState.history.length - 1 : 0,
-            xIsNext: !gameState.history[gameState.history.length - 1].xIsNext,
+            xIsNext: gameState.history ? !gameState.history[gameState.history.length - 1].xIsNext : true,
         };
     }
 
@@ -33,12 +33,25 @@ class Game extends React.Component {
         }
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const current = history[this.state.stepNumber];
+        const squares = current.squares.slice();
+
         const gameStateUpdate = {
             history: this.state.history,
             stepNumber: this.state.stepNumber,
             xIsNext: this.state.xIsNext
         };
+
+        if (!this.state.game.completed) {
+            if (calculateWinner(squares)) {
+                const gameUpdated = {...this.state.game, completed: true};
+                this.setState( {
+                    game: gameUpdated
+                });
+            }
+        }
 
         gameService.updateGameState(this.state.game, gameStateUpdate).then(
             console.log('Game state update posted!')

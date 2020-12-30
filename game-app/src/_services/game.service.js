@@ -36,6 +36,7 @@ function updateGameState(game, gameState) {
     let data = {
         'userId' : game.userId,
         'createdOn': game.createdOn,
+        'completed': game.completed,
         'gameState' : JSON.stringify(gameState),
     };
 

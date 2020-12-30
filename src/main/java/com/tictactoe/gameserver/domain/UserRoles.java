@@ -27,13 +27,13 @@ public class UserRoles implements Serializable {
     private UserRoleId userRoleId;
 
     @Version
-    protected Long version;
+    private Long version;
 
     @JsonIgnore
     @CreationTimestamp
-    protected LocalDateTime createdOn;
+    private LocalDateTime createdOn;
 
     @JsonIgnore
     @UpdateTimestamp
-    protected LocalDateTime updatedOn;
+    private LocalDateTime updatedOn;
 }

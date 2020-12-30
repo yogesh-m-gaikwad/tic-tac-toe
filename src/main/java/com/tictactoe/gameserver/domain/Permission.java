@@ -26,18 +26,18 @@ public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "permission_id")
-    protected Long permissionId;
+    private Long permissionId;
 
     private String name;
 
     @Version
-    protected Long version;
+    private Long version;
 
     @CreationTimestamp
-    protected LocalDateTime createdOn;
+    private LocalDateTime createdOn;
 
     @UpdateTimestamp
-    protected LocalDateTime updatedOn;
+    private LocalDateTime updatedOn;
 
     public String getName() {
         return name;

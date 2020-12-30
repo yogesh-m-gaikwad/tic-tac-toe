@@ -1,5 +1,5 @@
-import React from 'react';
-import { history } from '../_helpers';
+import React, { useState } from 'react';
+import { AlertDismissible, history } from '../_helpers';
 import { gameService, userService, authenticationService } from '../_services';
 
 class HomePage extends React.Component {
@@ -9,7 +9,8 @@ class HomePage extends React.Component {
         this.state = {
             currentUser: authenticationService.currentUserValue,
             userDetails: null,
-            lastGame: null
+            lastGame: null,
+            errorMessage: ''
         };
     }
 
@@ -24,6 +25,9 @@ class HomePage extends React.Component {
             lastGame => {
                 this.setState({ lastGame });
                 history.push({pathname: '/game', state: this.state});
+            },
+            error => {
+                this.setState({errorMessage: 'Error starting new game.'});
             }
         );
     }
@@ -33,6 +37,9 @@ class HomePage extends React.Component {
             lastGame => {
                 this.setState({ lastGame });
                 history.push({pathname: '/game', state: this.state});
+            },
+            error => {
+                this.setState({errorMessage: 'Error resuming last game.'});
             }
         );
     }
@@ -43,9 +50,13 @@ class HomePage extends React.Component {
 
     render() {
         const { currentUser, game } = this.state;
+
         return (
             <div>
                 <div className="container">
+                    <div className="game-board row justify-content-md-center">
+                        {this.state.errorMessage && <AlertDismissible errorMessage={this.state.errorMessage}/>}
+                    </div>
                     <div className="game-board row justify-content-md-center">
                         <button className="move-button" onClick={() => this.startGame()}>New Offline Game</button>
                     </div>

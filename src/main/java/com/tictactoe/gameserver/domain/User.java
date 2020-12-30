@@ -36,7 +36,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    protected Long userId;
+    private Long userId;
 
     private String email;
 
@@ -67,15 +67,15 @@ public class User implements UserDetails {
     private List<Role> roles;
 
     @Version
-    protected Long version;
+    private Long version;
 
     @JsonIgnore
     @CreationTimestamp
-    protected LocalDateTime createdOn;
+    private LocalDateTime createdOn;
 
     @JsonIgnore
     @UpdateTimestamp
-    protected LocalDateTime updatedOn;
+    private LocalDateTime updatedOn;
 
     @Override
     public boolean isEnabled() {

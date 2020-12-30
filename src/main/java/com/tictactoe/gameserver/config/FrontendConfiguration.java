@@ -15,6 +15,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
+/**
+ * FrontendConfiguration class for Web MVC server related configurations.
+ * Note: all new react paths from the game-app need to added to forward rule similar to
+ * <pre>
+ * 	registry.addViewController("/").setViewName("forward:/index.html");
+ * </pre>
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 @Configuration
 @EnableWebSecurity
 public class FrontendConfiguration implements WebMvcConfigurer {
