@@ -8,6 +8,12 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * RolePermissionsId class for the joining Role and Permission tables for role based auth.
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 @Embeddable
 @NoArgsConstructor
 public class RolePermissionsId implements Serializable {

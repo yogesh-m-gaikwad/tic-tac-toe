@@ -4,6 +4,12 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
+/**
+ * CustomPrincipal class for to allow username or email based login.
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 @Component
 public class CustomPrincipal implements Serializable {
 

@@ -17,6 +17,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * User class for spring security implementations.
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 @Data
 @Entity
 @NoArgsConstructor

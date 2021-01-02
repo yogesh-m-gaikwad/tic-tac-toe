@@ -8,6 +8,12 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * UserRoleId class for the joining Role and User tables for role based auth.
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 @Embeddable
 @NoArgsConstructor
 public class UserRoleId implements Serializable {

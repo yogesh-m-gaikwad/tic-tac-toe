@@ -10,6 +10,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Role class for the role based auth.
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 @Data
 @Entity
 @NoArgsConstructor

@@ -9,6 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+/**
+ * Primary rest service.
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 @RestController
 public class UserGameRestService {
 

@@ -9,6 +9,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Permission class for the role based auth.
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 @Data
 @Entity
 @NoArgsConstructor

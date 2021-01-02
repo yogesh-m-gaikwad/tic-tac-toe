@@ -1,22 +1,20 @@
 package com.tictactoe.gameserver.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
+/**
+ * Client class for the oAuth entity.
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode

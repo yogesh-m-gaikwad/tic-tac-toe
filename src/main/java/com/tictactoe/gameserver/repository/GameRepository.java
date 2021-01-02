@@ -8,6 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+/**
+ * Client JPA repository.
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 @Repository
 @Transactional
 public interface GameRepository extends JpaRepository<Game, Long> {

@@ -10,6 +10,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * RolePermissions class for the role based auth.
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode

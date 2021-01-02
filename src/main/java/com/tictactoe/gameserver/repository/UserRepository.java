@@ -9,6 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+/**
+ * User JPA repository.
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 @Repository
 @Transactional
 @RepositoryRestResource(collectionResourceRel = "user", path = "user")

@@ -8,6 +8,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Game class for the main game entity.
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 @Data
 @Entity
 @EqualsAndHashCode

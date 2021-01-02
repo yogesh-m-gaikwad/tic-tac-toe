@@ -12,6 +12,12 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * CustomUserAuthenticationConverter class for to allow username or email based login.
+ *
+ * @author Yogesh Gaikwad
+ * @since 1.0.0
+ */
 public class CustomUserAuthenticationConverter implements UserAuthenticationConverter {
 
 	private final String EMAIL = "email";
@@ -25,7 +31,7 @@ public class CustomUserAuthenticationConverter implements UserAuthenticationConv
 
 	@Override
 	public Map<String, ?> convertUserAuthentication(Authentication userAuthentication) {
-		Map<String, Object> response = new LinkedHashMap<String, Object>();
+		Map<String, Object> response = new LinkedHashMap<>();
 		response.put(USERNAME, userAuthentication.getName());
 
 		if (userAuthentication.getAuthorities() != null && !userAuthentication.getAuthorities().isEmpty())
