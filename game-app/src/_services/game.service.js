@@ -2,12 +2,18 @@ import config from 'config';
 import { authHeader, restAuthHeader, handleResponse } from '../_helpers';
 
 export const gameService = {
-    getLastGame, addNewGame, updateGameState
+    getLastGame, addNewGame, updateGameState, requestPair
 };
 
 function getLastGame(userId) {
     const requestOptions = { method: 'GET', headers: authHeader() };
-    return fetch(`${config.apiUrl}/rest/user/${userId}/lastgame`, requestOptions)
+    return fetch(`${config.apiUrl}/rest/user/game/${userId}/last`, requestOptions)
+        .then(handleResponse);
+}
+
+function requestPair(userId) {
+    const requestOptions = { method: 'GET', headers: authHeader() };
+    return fetch(`${config.apiUrl}/rest/user/${userId}/pair`, requestOptions)
         .then(handleResponse);
 }
 

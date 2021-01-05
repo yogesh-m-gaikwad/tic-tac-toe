@@ -29,38 +29,39 @@ import java.util.List;
 @EnableWebSecurity
 public class FrontendConfiguration implements WebMvcConfigurer {
 
-	/**
-	 * Ensure client-side paths redirect to index.html because client handles routing. NOTE: Do NOT use @EnableWebMvc or it will break this.
-	 */
-	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/").setViewName("forward:/index.html");
-		registry.addViewController("/signin").setViewName("forward:/index.html");
-		registry.addViewController("/game").setViewName("forward:/index.html");
-	}
+    /**
+     * Ensure client-side paths redirect to index.html because client handles routing. NOTE: Do NOT use @EnableWebMvc or it will break this.
+     */
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("forward:/index.html");
+        registry.addViewController("/signin").setViewName("forward:/index.html");
+        registry.addViewController("/game").setViewName("forward:/index.html");
+        registry.addViewController("/game/live").setViewName("forward:/index.html");
+    }
 
-	@Override
-	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-		argumentResolvers.add(currentUserHandlerMethodArgumentResolver());
-	}
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(currentUserHandlerMethodArgumentResolver());
+    }
 
-	@Bean
-	public HandlerMethodArgumentResolver currentUserHandlerMethodArgumentResolver() {
-		return new HandlerMethodArgumentResolver() {
-			@Override
-			public boolean supportsParameter(MethodParameter parameter) {
-				return parameter.getParameterType().equals(CustomPrincipal.class);
-			}
+    @Bean
+    public HandlerMethodArgumentResolver currentUserHandlerMethodArgumentResolver() {
+        return new HandlerMethodArgumentResolver() {
+            @Override
+            public boolean supportsParameter(MethodParameter parameter) {
+                return parameter.getParameterType().equals(CustomPrincipal.class);
+            }
 
-			@Override
-			public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-					NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-				try {
-					return (CustomPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-				} catch (Exception e) {
-					return null;
-				}
-			}
-		};
-	}
+            @Override
+            public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                          NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+                try {
+                    return (CustomPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+        };
+    }
 }

@@ -1,6 +1,5 @@
 package com.tictactoe.gameserver.domain;
 
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
@@ -31,21 +30,21 @@ public class UserRoleId implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this == o) {
             return true;
         }
 
-        if ( o == null || getClass() != o.getClass() ) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
         UserRoleId pk = (UserRoleId) o;
-        return Objects.equals(userId, pk.userId ) &&
-                Objects.equals(roleId, pk.roleId );
+        return Objects.equals(userId, pk.userId) &&
+                Objects.equals(roleId, pk.roleId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash( roleId, userId );
+        return Objects.hash(roleId, userId);
     }
 }

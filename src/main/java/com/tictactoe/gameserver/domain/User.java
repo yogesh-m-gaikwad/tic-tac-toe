@@ -30,6 +30,38 @@ import java.util.Set;
 public class User implements UserDetails {
 
     private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Long userId;
+    private String email;
+    private String username;
+    @JsonIgnore
+    private String password;
+    @JsonIgnore
+    private boolean enabled;
+    @JsonIgnore
+    @Column(name = "account_locked")
+    private boolean accountNonLocked;
+    @JsonIgnore
+    @Column(name = "account_expired")
+    private boolean accountNonExpired;
+    @JsonIgnore
+    @Column(name = "credentials_expired")
+    private boolean credentialsNonExpired;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles", joinColumns = {
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id")}, inverseJoinColumns = {
+            @JoinColumn(name = "role_id", referencedColumnName = "role_id")})
+    private List<Role> roles;
+    @Version
+    private Long version;
+    @JsonIgnore
+    @CreationTimestamp
+    private LocalDateTime createdOn;
+    @JsonIgnore
+    @UpdateTimestamp
+    private LocalDateTime updatedOn;
 
     public User(Long userId, String email, String username, String passwordCode) {
         this.userId = userId;
@@ -38,50 +70,6 @@ public class User implements UserDetails {
         this.password = passwordCode;
         this.enabled = true;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long userId;
-
-    private String email;
-
-    private String username;
-
-    @JsonIgnore
-    private String password;
-
-    @JsonIgnore
-    private boolean enabled;
-
-    @JsonIgnore
-    @Column(name = "account_locked")
-    private boolean accountNonLocked;
-
-    @JsonIgnore
-    @Column(name = "account_expired")
-    private boolean accountNonExpired;
-
-    @JsonIgnore
-    @Column(name = "credentials_expired")
-    private boolean credentialsNonExpired;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles", joinColumns = {
-            @JoinColumn(name = "user_id", referencedColumnName = "user_id")}, inverseJoinColumns = {
-            @JoinColumn(name = "role_id", referencedColumnName = "role_id")})
-    private List<Role> roles;
-
-    @Version
-    private Long version;
-
-    @JsonIgnore
-    @CreationTimestamp
-    private LocalDateTime createdOn;
-
-    @JsonIgnore
-    @UpdateTimestamp
-    private LocalDateTime updatedOn;
 
     @Override
     public boolean isEnabled() {

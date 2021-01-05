@@ -14,7 +14,7 @@ class GamePage extends React.Component {
 
     render() {
         return (
-            <Game lastGame={this.state.lastGame}/>
+            <Game game={this.state.game}/>
         );
     }
 }

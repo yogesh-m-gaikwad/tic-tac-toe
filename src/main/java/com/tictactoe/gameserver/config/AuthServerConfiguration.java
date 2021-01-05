@@ -42,9 +42,6 @@ import java.util.Map;
 @EnableAuthorizationServer
 public class AuthServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-    @Value("${check-user-scopes}")
-    private Boolean checkUserScopes;
-
     private final DataSource dataSource;
 
     private final PasswordEncoder passwordEncoder;
@@ -54,6 +51,9 @@ public class AuthServerConfiguration extends AuthorizationServerConfigurerAdapte
     private final ClientDetailsService clientDetailsService;
 
     private final AuthenticationManager authenticationManager;
+
+    @Value("${check-user-scopes}")
+    private Boolean checkUserScopes;
 
     @Autowired
     public AuthServerConfiguration(@Qualifier("dataSource") DataSource dataSource, PasswordEncoder passwordEncoder, UserDetailsService userDetailsService, ClientDetailsService clientDetailsService, @Qualifier("authenticationManagerBean") AuthenticationManager authenticationManager) {
@@ -103,7 +103,7 @@ public class AuthServerConfiguration extends AuthorizationServerConfigurerAdapte
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter converter = new CustomTokenEnhancer();
         converter.setKeyPair(
-                new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "D1@m0nd2018!".toCharArray()).getKeyPair("jwt"));
+                new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "root@break".toCharArray()).getKeyPair("jwt"));
         return converter;
     }
 
@@ -121,7 +121,7 @@ public class AuthServerConfiguration extends AuthorizationServerConfigurerAdapte
             info.put("email", user.getEmail());
 
             DefaultOAuth2AccessToken customAccessToken = new DefaultOAuth2AccessToken(accessToken);
-            Date exp = new Date(System.currentTimeMillis() + (1000*60*30)); // 30 minutes
+            Date exp = new Date(System.currentTimeMillis() + (1000 * 60 * 30)); // 30 minutes
             customAccessToken.setExpiration(exp);
             customAccessToken.setAdditionalInformation(info);
 

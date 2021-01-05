@@ -22,6 +22,37 @@ import java.time.LocalDateTime;
 public class Client {
 
     private static final long serialVersionUID = 1L;
+    @Id
+    @Column(name = "client_id")
+    private String clientId;
+    @Column(name = "resource_ids")
+    private String resourceIds;
+    @Column(name = "client_secret")
+    private String clientSecret;
+    @Column(name = "scope")
+    private String scope;
+    @Column(name = "authorized_grant_types")
+    private String authorizedGrantTypes;
+    @Column(name = "web_server_redirect_uri")
+    private String webServerRedirectURI;
+    @Column(name = "authorities")
+    private String authorities;
+    @Column(name = "access_token_validity")
+    private Long accessTokenValidity;
+    @Column(name = "refresh_token_validity")
+    private Long refresh_token_validity;
+    @Column(name = "additional_information")
+    private String additionalInformation;
+    @Column(name = "autoapprove")
+    private String autoApprove;
+    @Version
+    private Long version;
+    @JsonIgnore
+    @CreationTimestamp
+    private LocalDateTime createdOn;
+    @JsonIgnore
+    @UpdateTimestamp
+    private LocalDateTime updatedOn;
 
     public Client(String clientId, String resourceIds, String clientSecret, String scope, String authorizedGrantTypes,
                   String webServerRedirectURI, String authorities, Long accessTokenValidity,
@@ -39,49 +70,4 @@ public class Client {
         this.autoApprove = autoApprove;
         this.version = version;
     }
-
-    @Id
-    @Column(name = "client_id")
-    private String clientId;
-
-    @Column(name = "resource_ids")
-    private String resourceIds;
-
-    @Column(name = "client_secret")
-    private String clientSecret;
-
-    @Column(name = "scope")
-    private String scope;
-
-    @Column(name = "authorized_grant_types")
-    private String authorizedGrantTypes;
-
-    @Column(name = "web_server_redirect_uri")
-    private String webServerRedirectURI;
-
-    @Column(name = "authorities")
-    private String authorities;
-
-    @Column(name = "access_token_validity")
-    private Long accessTokenValidity;
-
-    @Column(name = "refresh_token_validity")
-    private Long refresh_token_validity;
-
-    @Column(name = "additional_information")
-    private String additionalInformation;
-
-    @Column(name = "autoapprove")
-    private String autoApprove;
-
-    @Version
-    private Long version;
-
-    @JsonIgnore
-    @CreationTimestamp
-    private LocalDateTime createdOn;
-
-    @JsonIgnore
-    @UpdateTimestamp
-    private LocalDateTime updatedOn;
 }

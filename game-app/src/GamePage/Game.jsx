@@ -1,22 +1,28 @@
 import React from 'react';
 import Board from './Board';
-import { gameService } from '../_services';
+import { authenticationService, gameService } from '../_services';
 
 class Game extends React.Component {
     constructor(props) {
         super(props);
-        let gameState = Array(9).fill(null);
-        if (this.props.lastGame && this.props.lastGame.gameState) {
-            gameState = JSON.parse(this.props.lastGame.gameState);
+        let gameState = {
+            history: [{ squares: Array(9).fill(null)}],
+            xIsNext:  true,
+            stepNumber: 0,
+        };
+
+        if (this.props.game && this.props.game.gameState) {
+            gameState = JSON.parse(this.props.game.gameState);
         }
 
         let gameId = null;
-        if (this.props.lastGame && this.props.lastGame.gameId) {
-            gameId = this.props.lastGame.gameId;
+        if (this.props.game && this.props.game.gameId) {
+            gameId = this.props.game.gameId;
         }
 
         this.state = {
-            game: this.props.lastGame,
+            currentUser: authenticationService.currentUserValue,
+            game: this.props.game,
             gameId: gameId,
             history: gameState.history,
             stepNumber: gameState.history ? gameState.history.length - 1 : 0,
@@ -26,10 +32,20 @@ class Game extends React.Component {
 
     componentDidMount() {
         let gameId = null;
-        if (this.props.lastGame && this.props.lastGame.gameId) {
+        if (this.props.game && this.props.game.gameId) {
             this.setState( {
-                gameId: this.props.lastGame.gameId
+                gameId: this.props.game.gameId
             });
+        }
+        else{
+            gameService.getLastGame(this.state.currentUser.user_id).then(
+                game => {
+                    this.setState({ game });
+                },
+                error => {
+                    this.setState({errorMessage: 'Error resuming last game.'});
+                }
+            );
         }
     }
 

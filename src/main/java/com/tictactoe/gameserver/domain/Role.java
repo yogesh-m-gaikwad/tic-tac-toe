@@ -23,34 +23,28 @@ import java.util.List;
 public class Role {
 
     private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
+    private Long roleId;
+    @Version
+    private Long version;
+    @CreationTimestamp
+    private LocalDateTime createdOn;
+    @UpdateTimestamp
+    private LocalDateTime updatedOn;
+    private String name;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "role_permissions", joinColumns = {
+            @JoinColumn(name = "role_id", referencedColumnName = "role_id")}, inverseJoinColumns = {
+            @JoinColumn(name = "permission_id", referencedColumnName = "permission_id")})
+    private List<Permission> permissions;
 
     public Role(Long roleId, String name, Long version) {
         this.roleId = roleId;
         this.name = name;
         this.version = version;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
-    private Long roleId;
-
-    @Version
-    private Long version;
-
-    @CreationTimestamp
-    private LocalDateTime createdOn;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedOn;
-
-    private String name;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "role_permissions", joinColumns = {
-            @JoinColumn(name = "role_id", referencedColumnName = "role_id")}, inverseJoinColumns = {
-            @JoinColumn(name = "permission_id", referencedColumnName = "permission_id")})
-    private List<Permission> permissions;
 
     public String getName() {
         return name;

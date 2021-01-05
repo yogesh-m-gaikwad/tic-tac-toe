@@ -6,7 +6,10 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Version;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -23,29 +26,25 @@ import java.time.LocalDateTime;
 public class RolePermissions implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    public RolePermissions(RolePermissionsId rolePermissionsId, Long version) {
-        this.rolePermissionsId = rolePermissionsId;
-        this.version = version;
-    }
-
-    @EmbeddedId
-    private  RolePermissionsId rolePermissionsId;
+    @Version
+    protected Long version;
+    @JsonIgnore
+    @CreationTimestamp
+    protected LocalDateTime createdOn;
 
     /*@Column(name = "permission_id")
     private Long permissionId;
 
     @Column(name = "role_id")
     private Long roleId;*/
-
-    @Version
-    protected Long version;
-
-    @JsonIgnore
-    @CreationTimestamp
-    protected LocalDateTime createdOn;
-
     @JsonIgnore
     @UpdateTimestamp
     protected LocalDateTime updatedOn;
+    @EmbeddedId
+    private RolePermissionsId rolePermissionsId;
+
+    public RolePermissions(RolePermissionsId rolePermissionsId, Long version) {
+        this.rolePermissionsId = rolePermissionsId;
+        this.version = version;
+    }
 }

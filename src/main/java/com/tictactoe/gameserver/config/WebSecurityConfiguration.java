@@ -34,7 +34,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/");
         web.ignoring().antMatchers("/signin");
-        web.ignoring().antMatchers("/game");
+        web.ignoring().antMatchers("/game/**");
         web.ignoring().antMatchers("/rest/**");
     }
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AlertDismissible, history } from '../_helpers';
-import { gameService, userService, authenticationService } from '../_services';
+import { gameService, userService, authenticationService, requestPair } from '../_services';
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -9,7 +9,7 @@ class HomePage extends React.Component {
         this.state = {
             currentUser: authenticationService.currentUserValue,
             userDetails: null,
-            lastGame: null,
+            game: null,
             errorMessage: ''
         };
     }
@@ -22,8 +22,8 @@ class HomePage extends React.Component {
 
     startGame() {
         gameService.addNewGame(this.state.currentUser.user_id).then(
-            lastGame => {
-                this.setState({ lastGame });
+            game => {
+                this.setState({ game });
                 history.push({pathname: '/game', state: this.state});
             },
             error => {
@@ -34,9 +34,9 @@ class HomePage extends React.Component {
 
     resumeLastGame() {
         gameService.getLastGame(this.state.currentUser.user_id).then(
-            lastGame => {
-                this.setState({ lastGame });
-                history.push({pathname: '/game', state: this.state});
+            game => {
+                this.setState({ game });
+                history.push({ pathname: '/game', state: this.state });
             },
             error => {
                 this.setState({errorMessage: 'Error resuming last game.'});
@@ -45,7 +45,15 @@ class HomePage extends React.Component {
     }
 
     startOnlineGame() {
-        history.push({pathname: '/game/live', state: this.state});
+        gameService.requestPair(this.state.currentUser.user_id).then(
+            game => {
+                this.setState({ game });
+                history.push({pathname: '/game/live', state: this.state});
+            },
+            error => {
+                this.setState({errorMessage: 'Error pairing game.'});
+            }
+        );
     }
 
     render() {
@@ -58,7 +66,7 @@ class HomePage extends React.Component {
                         {this.state.errorMessage && <AlertDismissible errorMessage={this.state.errorMessage}/>}
                     </div>
                     <div className="game-board row justify-content-md-center">
-                        <button className="move-button" onClick={() => this.startGame()}>New Offline Game</button>
+                        <button className="move-button" onClick={() => this.startGame()}>New Game</button>
                     </div>
                     <div className="game-board row justify-content-md-center">
                         <button className="move-button" onClick={() => this.resumeLastGame()}>Resume Last Game</button>
