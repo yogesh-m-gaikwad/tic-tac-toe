@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { authenticationService, gameService } from '../_services';
+import { authenticationService, gameService } from '@/_services';
 import Game from './Game';
 
 class GamePage extends React.Component {

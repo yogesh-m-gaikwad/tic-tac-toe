@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { AlertDismissible, history } from '../_helpers';
-import { gameService, userService, authenticationService, requestPair } from '../_services';
+import { AlertDismissible, history } from '@/_helpers';
+import { gameService, userService, authenticationService, requestPair } from '@/_services';
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -23,8 +23,10 @@ class HomePage extends React.Component {
     startGame() {
         gameService.addNewGame(this.state.currentUser.user_id).then(
             game => {
-                this.setState({ game });
-                history.push({pathname: '/game', state: this.state});
+                if ( game ){
+                    this.setState({ game });
+                    history.push({pathname: `/game/${game.gameId}`, state: this.state});
+                }
             },
             error => {
                 this.setState({errorMessage: 'Error starting new game.'});
@@ -36,7 +38,7 @@ class HomePage extends React.Component {
         gameService.getLastGame(this.state.currentUser.user_id).then(
             game => {
                 this.setState({ game });
-                history.push({ pathname: '/game', state: this.state });
+                history.push({ pathname: `/game/${game.gameId}`, state: this.state });
             },
             error => {
                 this.setState({errorMessage: 'Error resuming last game.'});
@@ -45,15 +47,15 @@ class HomePage extends React.Component {
     }
 
     startOnlineGame() {
-        gameService.requestPair(this.state.currentUser.user_id).then(
-            game => {
-                this.setState({ game });
-                history.push({pathname: '/game/live', state: this.state});
+        gameService.registerInGamePool(this.state.currentUser.user_id).then(
+            gamePool => {
+                history.push({pathname: `/live`, state: this.state});
             },
             error => {
-                this.setState({errorMessage: 'Error pairing game.'});
+                this.setState({errorMessage: 'Error starting online game.'});
             }
         );
+
     }
 
     render() {

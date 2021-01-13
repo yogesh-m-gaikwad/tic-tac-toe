@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 @Data
 public class GameState {
-    public History history;
+    public ArrayList<History> history;
     public int stepNumber;
     public boolean completed;
 
@@ -15,7 +15,8 @@ public class GameState {
     public boolean xIsNext;
 
     public GameState() {
-        this.history = new History();
+        this.history = new ArrayList<>();
+        this.history.add(new History());
         this.stepNumber = 0;
         this.xIsNext = true;
     }

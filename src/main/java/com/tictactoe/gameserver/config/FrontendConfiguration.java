@@ -37,7 +37,8 @@ public class FrontendConfiguration implements WebMvcConfigurer {
         registry.addViewController("/").setViewName("forward:/index.html");
         registry.addViewController("/signin").setViewName("forward:/index.html");
         registry.addViewController("/game").setViewName("forward:/index.html");
-        registry.addViewController("/game/live").setViewName("forward:/index.html");
+        registry.addViewController("/live").setViewName("forward:/index.html");
+        registry.addViewController("/live/**").setViewName("forward:/index.html");
     }
 
     @Override

@@ -1,12 +1,13 @@
 import React from 'react';
 import { Router, Route, Link } from 'react-router-dom';
 
-import { history } from '../_helpers';
-import { authenticationService } from '../_services';
-import { PrivateRoute } from '../_components';
-import { HomePage } from '../HomePage';
-import { GamePage, LiveGamePage } from '../GamePage';
-import { LoginPage } from '../LoginPage';
+import { history } from '@/_helpers';
+import { authenticationService } from '@/_services';
+import { PrivateRoute } from '@/_components';
+import { HomePage } from '@/HomePage';
+import { GamePage } from '@/GamePage';
+import { LiveGamePage } from '@/LiveGamePage';
+import { LoginPage } from '@/LoginPage';
 
 class App extends React.Component {
     constructor(props) {
@@ -45,8 +46,9 @@ class App extends React.Component {
                             <div className="row">
                                 <div className="col-md-6 offset-md-3">
                                     <PrivateRoute exact path="/" component={HomePage} />
-                                    <PrivateRoute exact path="/game" component={GamePage} />
-                                    <PrivateRoute exact path="/game/live" component={LiveGamePage} />
+                                    <PrivateRoute exact path="/game/:gameId" component={GamePage} />
+                                    <PrivateRoute exact path="/live" component={LiveGamePage} />
+                                    <PrivateRoute exact path="/live/:gameId" component={LiveGamePage} />
                                     <Route path="/signin" component={LoginPage} />
 
                                 </div>

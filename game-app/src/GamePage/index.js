@@ -1,2 +1,2 @@
 export * from './GamePage';
-export * from './LiveGamePage';
+export * from './Board';

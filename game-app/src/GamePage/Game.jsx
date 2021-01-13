@@ -1,6 +1,6 @@
 import React from 'react';
 import Board from './Board';
-import { authenticationService, gameService } from '../_services';
+import { authenticationService, gameService } from '@/_services';
 
 class Game extends React.Component {
     constructor(props) {
@@ -31,22 +31,14 @@ class Game extends React.Component {
     }
 
     componentDidMount() {
-        let gameId = null;
-        if (this.props.game && this.props.game.gameId) {
-            this.setState( {
-                gameId: this.props.game.gameId
-            });
-        }
-        else{
-            gameService.getLastGame(this.state.currentUser.user_id).then(
-                game => {
-                    this.setState({ game });
-                },
-                error => {
-                    this.setState({errorMessage: 'Error resuming last game.'});
-                }
-            );
-        }
+        gameService.getLastGame(this.state.currentUser.user_id).then(
+            game => {
+                this.setState({ game });
+            },
+            error => {
+                this.setState({errorMessage: 'Error resuming last game.'});
+            }
+        );
     }
 
     componentDidUpdate() {
@@ -60,18 +52,20 @@ class Game extends React.Component {
             xIsNext: this.state.xIsNext
         };
 
-        if (!this.state.game.completed) {
-            if (calculateWinner(squares)) {
-                const gameUpdated = {...this.state.game, completed: true};
-                this.setState( {
-                    game: gameUpdated
-                });
+        if (this.state.game) {
+            if (!this.state.game.completed) {
+                if (calculateWinner(squares)) {
+                    const gameUpdated = {...this.state.game, completed: true};
+                    this.setState( {
+                        game: gameUpdated
+                    });
+                }
             }
-        }
 
-        gameService.updateGameState(this.state.game, gameStateUpdate).then(
-            console.log('Game state update posted!')
-        );
+            gameService.updateGameState(this.state.game, gameStateUpdate).then(
+                console.log('Game state update posted!')
+            );
+        }
     }
 
     handleClick(i) {

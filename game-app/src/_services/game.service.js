@@ -1,8 +1,8 @@
 import config from 'config';
-import { authHeader, restAuthHeader, handleResponse } from '../_helpers';
+import { authHeader, restAuthHeader, handleResponse } from '@/_helpers';
 
 export const gameService = {
-    getLastGame, addNewGame, updateGameState, requestPair
+    getGameById, getLastGame, addNewGame, updateGameState, requestPair, registerInGamePool
 };
 
 function getLastGame(userId) {
@@ -11,9 +11,21 @@ function getLastGame(userId) {
         .then(handleResponse);
 }
 
+function getGameById(gameId) {
+    const requestOptions = { method: 'GET', headers: authHeader() };
+    return fetch(`${config.apiUrl}/rest/games/${gameId}`, requestOptions)
+        .then(handleResponse);
+}
+
 function requestPair(userId) {
     const requestOptions = { method: 'GET', headers: authHeader() };
     return fetch(`${config.apiUrl}/rest/user/${userId}/pair`, requestOptions)
+        .then(handleResponse);
+}
+
+function registerInGamePool(userId) {
+    const requestOptions = { method: 'GET', headers: authHeader() };
+    return fetch(`${config.apiUrl}/rest/user/${userId}/register`, requestOptions)
         .then(handleResponse);
 }
 
