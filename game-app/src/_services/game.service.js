@@ -52,8 +52,6 @@ function addNewGame(userId) {
 
 function updateGameState(game, gameState) {
     let data = {
-        'userId' : game.userId,
-        'createdOn': game.createdOn,
         'completed': game.completed,
         'gameState' : JSON.stringify(gameState),
     };
@@ -64,6 +62,6 @@ function updateGameState(game, gameState) {
         body: JSON.stringify(data),
     };
 
-    return fetch(`${config.apiUrl}/rest/games/${game.gameId}`, requestOptions)
+    return fetch(`${config.apiUrl}/rest/user/game/${game.gameId}/update`, requestOptions)
         .then(handleResponse);
 }

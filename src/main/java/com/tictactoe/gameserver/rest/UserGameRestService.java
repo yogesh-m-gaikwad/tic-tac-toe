@@ -2,14 +2,13 @@ package com.tictactoe.gameserver.rest;
 
 import com.tictactoe.gameserver.domain.Game;
 import com.tictactoe.gameserver.domain.GamingPool;
+import com.tictactoe.gameserver.model.GameModel;
 import com.tictactoe.gameserver.repository.GameRepository;
 import com.tictactoe.gameserver.repository.GamingPoolRepository;
 import com.tictactoe.gameserver.util.GameHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,5 +100,20 @@ public class UserGameRestService {
         }
 
         return Optional.of(userPoolRecord);
+    }
+
+    @RequestMapping(value = "rest/user/game/{gameId}/update", method = RequestMethod.PUT)
+    @Transactional
+    public Optional<Game> updateGameState(@PathVariable Long gameId, @RequestBody GameModel gameData) {
+        Optional<Game> gameToUpdateResult = gameRepository.findById(gameId);
+        if (gameToUpdateResult.isPresent()) {
+            Game gameToUpdate = gameToUpdateResult.get();
+            gameToUpdate.setCompleted(gameData.isCompleted());
+            gameToUpdate.setGameState(gameData.getGameState());
+            Game updatedGame = gameRepository.save(gameToUpdate);
+            return Optional.of(updatedGame);
+        } else {
+            return Optional.empty();
+        }
     }
 }

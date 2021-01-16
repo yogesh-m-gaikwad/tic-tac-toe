@@ -28,6 +28,7 @@ public class Game {
         this.userId = userId;
         this.userIdPaired = userIdPaired;
         this.completed = completed;
+        this.gameState = GameHelper.getDefaultGameState(userId, userIdPaired);
     }
 
     @Id

@@ -1,6 +1,6 @@
 package com.tictactoe.gameserver.util;
 
-import com.tictactoe.gameserver.model.GameState;
+import com.tictactoe.gameserver.model.TicTacToeGameState;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
@@ -16,7 +16,19 @@ public class GameHelper {
         ObjectMapper jsonMap = new ObjectMapper();
         String result = "";
         try {
-            result = jsonMap.writeValueAsString(new GameState());
+            result = jsonMap.writeValueAsString(new TicTacToeGameState());
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public static String getDefaultGameState(long userX, long userO) {
+        ObjectMapper jsonMap = new ObjectMapper();
+        String result = "";
+        try {
+            result = jsonMap.writeValueAsString(new TicTacToeGameState(userX, userO));
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }

@@ -11,19 +11,15 @@ class LiveGame extends React.Component {
             stepNumber: 0,
         };
 
-        if (this.props.game && this.props.game.gameState) {
-            gameState = JSON.parse(this.props.game.gameState);
-        }
-
-        let gameId = null;
-        if (this.props.game && this.props.game.gameId) {
-            gameId = this.props.game.gameId;
+        if (this.props.game) {
+            if (this.props.game.gameState && typeof this.props.game.gameState == "string") {
+                gameState = JSON.parse(this.props.game.gameState);
+            }
         }
 
         this.state = {
             currentUser: authenticationService.currentUserValue,
             game: this.props.game,
-            gameId: gameId,
             history: gameState.history,
             stepNumber: gameState.history ? gameState.history.length - 1 : 0,
             xIsNext: gameState.history ? !gameState.history[gameState.history.length - 1].xIsNext : true,
@@ -31,23 +27,25 @@ class LiveGame extends React.Component {
     }
 
     componentDidUpdate() {
-        if (!this.state.game) {
-            if (this.props.game && this.props.game.gameId) {
-                let gameState = {
-                    history: [{ squares: Array(9).fill(null)}],
-                    xIsNext:  true,
-                    stepNumber: 0,
-                };
+        if (this.props.game && this.props.game.gameId) {            
+            let gameState = {
+                history: [{ squares: Array(9).fill(null)}],
+                xIsNext:  true,
+                stepNumber: 0,
+            };
 
-                if (this.props.game.gameState) {
-                    gameState = JSON.parse(this.props.game.gameState);
-                }
+            if (this.props.game.gameState && typeof this.props.game.gameState == "string") {
+                gameState = JSON.parse(this.props.game.gameState);
+            } else {
+                gameState = this.props.game.gameState;
+            }
 
+            if (this.state.game && this.state.game.gameState.stepNumber != gameState.stepNumber) {
                 this.setState( {
                     game: this.props.game,
-                    gameId: this.props.game.gameId,
                     history: gameState.history,
-                    stepNumber: gameState.stepNumber
+                    stepNumber: gameState.stepNumber,
+                    xIsNext: gameState.xIsNext
                 });
             }
         }
@@ -56,45 +54,68 @@ class LiveGame extends React.Component {
             const current = history[this.state.stepNumber];
             const squares = current.squares.slice();
 
-            if (!this.state.game.completed) {
+            if (!this.state.game || !this.state.game.completed) {
+                if (this.props.game.gameState){
+                    if(this.props.game.gameState.stepNumber != this.state.stepNumber){
+                        let gameState = {
+                            history: [{ squares: Array(9).fill(null)}],
+                            xIsNext:  true,
+                            stepNumber: 0,
+                        };
+        
+                        if (this.props.game.gameState && typeof this.props.game.gameState == "string") {
+                            gameState = JSON.parse(this.props.game.gameState);
+                        } else {
+                            gameState = this.props.game.gameState;
+                        }
+
+                        this.setState( {
+                            game: this.props.game,
+                            history: gameState.history,
+                            stepNumber: gameState.stepNumber
+                        });
+                    }
+                }
+
                 if (calculateWinner(squares)) {
                     const gameUpdated = {...this.state.game, completed: true};
                     this.setState( {
                         game: gameUpdated
                     });
-                }
+                }                
             }
         }
     }
 
     handleClick(i) {
-        const history = this.state.history.slice(0, this.state.stepNumber + 1);
-        const current = history[this.state.stepNumber];
-        const squares = current.squares.slice();
-        if (calculateWinner(squares) || squares[i]) {
-            return;
+        if ( this.isMyTurn(this.state.game.gameState, this.state.currentUser.user_id) ) {
+            const history = this.state.history.slice(0, this.state.stepNumber + 1);
+            const current = history[this.state.stepNumber];
+            const squares = current.squares.slice();
+            if (calculateWinner(squares) || squares[i]) {
+                return;
+            }
+
+            squares[i] = this.state.xIsNext ? 'X' : 'O';
+            this.setState({
+                history: history.concat([{
+                    squares: squares,
+                }]),
+                stepNumber: history.length,
+                xIsNext: !this.state.xIsNext,
+            }, () => {
+
+                // Push updates of game state to db
+                const gameStateUpdate = {
+                    ...this.state.game.gameState,
+                    history: this.state.history,
+                    stepNumber: this.state.stepNumber,
+                    xIsNext: this.state.xIsNext,
+                };
+
+                this.props.updateGameState(this.state.game, gameStateUpdate);
+            });
         }
-
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
-        this.setState({
-            history: history.concat([{
-                squares: squares,
-            }]),
-            stepNumber: history.length,
-            xIsNext: !this.state.xIsNext,
-        }, () => {
-            // Update game state to db
-
-            const gameStateUpdate = {
-                history: this.state.history,
-                stepNumber: this.state.stepNumber,
-                xIsNext: this.state.xIsNext
-            };
-
-            gameService.updateGameState(this.state.game, gameStateUpdate).then(
-                console.log('Game state update posted!')
-            );
-        });
     }
 
     jumpTo(step) {
@@ -104,10 +125,28 @@ class LiveGame extends React.Component {
         });
     }
 
+    isMyTurn (game, userId) {
+        if ( game.xIsNext) {
+            if ( game.userX == userId ){
+                return true;    
+            }
+        }
+        else {
+            if ( game.userX != userId ){
+                return true;    
+            }
+        }
+
+
+        return false;
+    }
+
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
+        let status = '';
+        let update = '';
 
         const moves = history.map((step, move) => {
             const desc = move ?
@@ -120,8 +159,18 @@ class LiveGame extends React.Component {
             );
         });
 
+
+        if (this.isMyTurn(this.state.game.gameState, this.state.currentUser.user_id)) {
+            update = 'It\'s Your turn!';
+        } else {
+            update = 'Waiting for other player to play!';
+        }
+
         if (winner) {
+            this.props.clearTimers();
             status = 'Winner: ' + winner;
+            update = 'Game Over!';
+            
         } else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
@@ -139,6 +188,11 @@ class LiveGame extends React.Component {
                 <div className="container game-info">
                     <div className="row justify-content-md-center">
                         <div>{status}</div>
+                    </div>
+                </div>
+                <div className="container game-info">
+                    <div className="row justify-content-md-center">
+                        <div>{update}</div>
                     </div>
                 </div>
                 <div className="container game-info">

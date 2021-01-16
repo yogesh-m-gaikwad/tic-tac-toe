@@ -44,8 +44,9 @@ class LoginPage extends React.Component {
                                     setStatus(error);
                                 }
                             );
-                    }}
-                    render={({ errors, status, touched, isSubmitting }) => (
+                    }}                    
+                >
+                {({ errors, status, touched, isSubmitting }) => (
                         <Form>
                             <div className="form-group">
                                 <label htmlFor="username">Username</label>
@@ -68,7 +69,7 @@ class LoginPage extends React.Component {
                             }
                         </Form>
                     )}
-                />
+                </Formik>
             </div>
         )
     }

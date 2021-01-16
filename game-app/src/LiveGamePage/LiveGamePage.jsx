@@ -20,15 +20,19 @@ class LiveGamePage extends React.Component {
 
         this.getGame = this.getGame.bind(this);
         this.getGameState = this.getGameState.bind(this);
+        this.updateGameState = this.updateGameState.bind(this);
+        this.clearTimers = this.clearTimers.bind(this);
     }
 
     getGame(){
-        if( !this.state.game ) {
+        if ( !this.state.game ) {
             gameService.requestPair(this.state.currentUser.user_id).then(
                 game => {
                     if (game) {
-                        this.setState({ game });
-                        this.setState({ loading: false });
+                        if (game.gameState && typeof game.gameState == "string") {
+                            game.gameState = JSON.parse(game.gameState);
+                        }
+                        this.setState({ game, loading: false });                                                
                         clearInterval(this.pairInterval);
                     }
                 },
@@ -45,13 +49,35 @@ class LiveGamePage extends React.Component {
         }
     }
 
-    getGameState(){
-        if( this.state.game ) {
+    isMyTurn (game, userId) {
+        if ( game.xIsNext) {
+            if ( game.userX == userId ){
+                return true;    
+            }
+        }
+        else {
+            if ( game.userX != userId ){
+                return true;    
+            }
+        }
+
+
+        return false;
+    }
+
+    getGameState() {
+        if ( this.state.game ) {
             gameService.getGameById(this.state.game.gameId).then(
-                game => {
-                    this.setState({ game });
-                    this.setState({ refreshing: false });
-                    clearInterval(this.gameInterval);
+                game => {                        
+                    if (game.gameState && typeof game.gameState == "string") {
+                        game.gameState = JSON.parse(game.gameState);
+                    }
+
+                    if ( this.state.game.gameState.stepNumber != game.gameState.stepNumber ) {
+                        this.setState({ game, refreshing: false });
+                    }
+
+                    //clearInterval(this.gameInterval);
                 },
                 error => {
                     this.setState({ gameStateRetries: gameStateRetries + 1 });
@@ -59,21 +85,34 @@ class LiveGamePage extends React.Component {
                     if ( gameStateRetries > 200 ) {
                         this.setState({ refreshing: false });
                         this.setState({ errorMessage: "Maximum retries exceeded refreshing game state." });
-                        clearInterval(this.gameInterval);
+                        //clearInterval(this.gameInterval);
                     }
                 }
             );
         }
     }
 
+    updateGameState(game, gameStateUpdate){
+        this.setState({ game: game }, () => {            
+            // Save game state to db after state updates
+            gameService.updateGameState(game, gameStateUpdate).then(
+                console.log('Game state update posted!')
+            );
+        });
+    }
+
     componentDidMount() {
         // set scheduled intervals
         this.pairInterval = setInterval(this.getGame, 5000);
-        this.gameInterval = setInterval(this.getGameState, 1000);
+        this.gameInterval = setInterval(this.getGameState, 1200);
     }
 
     componentWillUnmount() {
         // Clear the scheduled intervals right before component unmount
+        this.clearTimers();
+    }
+
+    clearTimers() {
         clearInterval(this.pairInterval);
         clearInterval(this.gameInterval);
     }
@@ -87,7 +126,9 @@ class LiveGamePage extends React.Component {
                      <span className="text-danger">{errorMessage}</span>
                 </div>
             }
-            <LiveGame game={game} live={true}/>
+            { game &&
+                <LiveGame game={game} live={true} updateGameState={this.updateGameState} clearTimers={this.clearTimers} />
+            }
             { loading &&
                 <div className="row justify-content-md-center">
                     <Spinner animation="border" role="status">
